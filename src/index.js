@@ -1,14 +1,51 @@
 module.exports = function toReadable (number) {
-    var first_twenty_digits = "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen".split(" ");
-    var tens = "twenty thirty forty fifty sixty seventy eighty ninety".split(" ");
-    if (number < 20){
-        return first_twenty_digits[number];
+    var NS = [{value: 1000, str: "thousand"},
+              {value: 100, str: "hundred"},
+              {value: 90, str: "ninety"},
+              {value: 80, str: "eighty"},
+              {value: 70, str: "seventy"},
+              {value: 60, str: "sixty"},
+              {value: 50, str: "fifty"},
+              {value: 40, str: "forty"},
+              {value: 30, str: "thirty"},
+              {value: 20, str: "twenty"},
+              {value: 19, str: "nineteen"},
+              {value: 18, str: "eighteen"},
+              {value: 17, str: "seventeen"},
+              {value: 16, str: "sixteen"},
+              {value: 15, str: "fifteen"},
+              {value: 14, str: "fourteen"},
+              {value: 13, str: "thirteen"},
+              {value: 12, str: "twelve"},
+              {value: 11, str: "eleven"},
+              {value: 10, str: "ten"},
+              {value: 9, str: "nine"},
+              {value: 8, str: "eight"},
+              {value: 7, str: "seven"},
+              {value: 6, str: "six"},
+              {value: 5, str: "five"},
+              {value: 4, str: "four"},
+              {value: 3, str: "three"},
+              {value: 2, str: "two"},
+              {value: 1, str: "one"}
+             ];
+    var answer = "";
+    for (var n of NS) {
+        if(number>=n.value){
+            if(number <= 20){
+                answer += n.str;
+                number -= n.value;
+                if(number > 0) {answer += " "};
+            } else {
+                let t = Math.floor(number / n.value);
+                let d = number % n.value;
+                if(d > 0){
+                    return toReadable(t) + " " + n.str + " " + toReadable(d);
+                }else{
+                    return toReadable(t) + " " + n.str;
+                }
+            }
+        }
     }
-    var digit = number % 10;
-    if (number < 100) {
-        return tens[~~(number / 10) - 2] + (digit ? "-" + first_twenty_digits[digit] : "");
-    }
-    if (number < 1000) {
-        return first_twenty_digits[~~(number / 100)] + " hundred" + (number % 100 == 0 ? "" : " " + toReadable(number % 100));
-    }
+    return answer;
 }
