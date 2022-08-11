@@ -1,57 +1,45 @@
 module.exports = function toReadable (number) {
-    var NS = [{value: 1000000000000000000000, str: "quintillion"},
-              {value: 1000000000000000000, str: "quadrillion"},
-              {value: 1000000000000000, str: "trillion"},
-              {value: 1000000000000, str: "billion"},
-              {value: 1000000000, str: "milliard"},
-              {value: 1000000, str: "million"},
-              {value: 1000, str: "thousand"},
-              {value: 100, str: "hundred"},
-              {value: 90, str: "ninety"},
-              {value: 80, str: "eighty"},
-              {value: 70, str: "seventy"},
-              {value: 60, str: "sixty"},
-              {value: 50, str: "fifty"},
-              {value: 40, str: "forty"},
-              {value: 30, str: "thirty"},
-              {value: 20, str: "twenty"},
-              {value: 19, str: "nineteen"},
-              {value: 18, str: "eighteen"},
-              {value: 17, str: "seventeen"},
-              {value: 16, str: "sixteen"},
-              {value: 15, str: "fifteen"},
-              {value: 14, str: "fourteen"},
-              {value: 13, str: "thirteen"},
-              {value: 12, str: "twelve"},
-              {value: 11, str: "eleven"},
-              {value: 10, str: "ten"},
-              {value: 9, str: "nine"},
-              {value: 8, str: "eight"},
-              {value: 7, str: "seven"},
-              {value: 6, str: "six"},
-              {value: 5, str: "five"},
-              {value: 4, str: "four"},
-              {value: 3, str: "three"},
-              {value: 2, str: "two"},
-              {value: 1, str: "one"}
-             ];
+    var firsttwentydigits = {
+        1: "one",
+        2: "two",
+        3: "three",
+        4: "four",
+        5: "five",
+        6: "six",
+        7: "seven",
+        8: "eight",
+        9: "nine",
+        10: "ten",
+        11: "eleven",
+        12: "twelve",
+        13: "thirteen",
+        14: "fourteen",
+        15: "fifteen",
+        16: "sixteen",
+        17: "seventeen",
+        18: "eighteen",
+        19: "nineteen",
+        0: ""};
+    var tens = {
+        2: "twenty",
+        3: "thirty",
+        4: "forty",
+        5: "fifty",
+        6: "sixty",
+        7: "seventy",
+        8: "eighty",
+        9: "ninety"};
+    if (number == 0){return "zero"};
+    if (number >= 1000) {return "Too big"};
     var answer = "";
-    for (var n of NS) {
-        if(number>=n.value){
-            if(number <= 20){
-                answer += n.str;
-                number -= n.value;
-                if(number > 0) {answer += " "};
-            } else {
-                let t = Math.floor(number / n.value);
-                let d = number % n.value;
-                if(d > 0){
-                    return toReadable(t) + " " + n.str + " " + toReadable(d);
-                }else{
-                    return toReadable(t) + " " + n.str;
-                }
-            }
-        }
+    var denary = number % 100;
+    if (number / 100 >= 1){
+        answer += firsttwentydigits[Math.floor(number / 100)] + " hundred";
     }
-    return answer;
+    if (denary >= 20) {
+        answer = answer + " " + tens[Math.floor(denary / 10)];
+        denary = denary % 10;
+    }
+    answer = answer + " " + firsttwentydigits[denary];
+    return answer.trim();
 }
